@@ -179,20 +179,21 @@ def user_stats(df):
     print('-'*40)
 
 
-def generator_function(df):
-    """Helper generator function that displays the next 5 rows of a dataframe."""
-    for i in range(0, len(df), 5):
-        yield i
-
-
-def raw_data(df, generator):
+def raw_data(df):
     """ Displays the raw data upon request from the user"""
-    index = next(generator)
 
-    if index + 5 >= len(df):
-        print(df.iloc[index:])
-    else:
-        print(df.iloc[index: index + 5])
+    start_loc = 0
+    while True:
+        choice = input("Would you like to see the raw data? Enter yes or no. ").lower()
+        if choice != 'yes' and choice != 'no':
+            print('Invalid input. Enter yes or no. ')
+        elif choice == 'yes':
+            if start_loc + 5 >= len(df):
+                print(df.iloc[start_loc:])
+            else:
+                print(df.iloc[start_loc: start_loc + 5])
+        elif choice == 'no':
+            break
 
 
 
@@ -205,23 +206,12 @@ def main():
         station_stats(df)
         trip_duration_stats(df)
         user_stats(df)
-
-        my_gen = generator_function(df)
-
-        while True:
-            choice = input("Would you like to see the raw data? Enter yes or no. ").lower()
-            if choice != 'yes' and choice != 'no':
-                print('Invalid input. Enter yes or no. ')
-            elif choice == 'yes':
-                raw_data(df, my_gen)
-            elif choice == 'no':
-                break
+        raw_data(df)
 
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
             break
-
 
 
 if __name__ == "__main__":
